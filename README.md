@@ -1,6 +1,6 @@
 # Dashboard Analisis Data E-Commerce
 
-Dashboard ini menampilkan hasil analisis data E-Commerce, termasuk tren penjualan bulanan, produk terlaris, dan distribusi metode pembayaran. Dibangun menggunakan **Streamlit** dan **Python**.
+Dashboard ini menampilkan hasil analisis data E-Commerce, termasuk tren penjualan bulanan, produk terlaris, dan distribusi metode pembayaran. Dibangun menggunakan **Streamlit** dan **Python**. Dashboard ini juga dapat diakses melalui link berikut (Dashboard Streamlit)[https://dashboard-yt.streamlit.app/].
 
 ---
 
