@@ -79,5 +79,4 @@ st.write(filtered_data[['price', 'freight_value', 'payment_value']].describe())
 st.write("""
 **Catatan:**
 - Data yang digunakan telah melalui proses cleaning dan preprocessing.
-- Dashboard ini dapat disesuaikan dengan kebutuhan analisis lebih lanjut.
 """)
