@@ -24,10 +24,29 @@ df['order_purchase_timestamp'] = pd.to_datetime(df['order_purchase_timestamp'], 
 
 # Sidebar untuk Filter Data
 st.sidebar.header("Filter Data")
-selected_year = st.sidebar.selectbox("Pilih Tahun", df['order_purchase_timestamp'].dt.year.unique())
+# Tambahkan opsi "All Years"
+year_options = ['All Years'] + sorted(df['order_purchase_timestamp'].dt.year.unique().tolist())
+selected_year = st.sidebar.selectbox("Pilih Tahun", year_options)
 
 # Filter Data Berdasarkan Tahun
-filtered_data = df[df['order_purchase_timestamp'].dt.year == selected_year]
+if selected_year == 'All Years':
+    filtered_data = df  # Tampilkan semua data jika "All Years" dipilih
+else:
+    filtered_data = df[df['order_purchase_timestamp'].dt.year == selected_year]
+
+# Top 5 Kategori Produk Terlaris
+st.header("🏆 Top 5 Kategori Produk Terlaris")
+top_products = filtered_data['product_category_name_english'].value_counts().reset_index()
+top_products.columns = ['Kategori Produk', 'Jumlah Penjualan']
+top_5_products = top_products.head(5)
+
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.barplot(data=top_5_products, x='Jumlah Penjualan', y='Kategori Produk', hue='Kategori Produk', palette='viridis', ax=ax)
+plt.title(f"Top 5 Kategori Produk Terlaris ({selected_year})", fontsize=16)
+plt.xlabel("Total Penjualan", fontsize=14)
+plt.ylabel("Kategori Produk", fontsize=14)
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+st.pyplot(fig)
 
 # Tren Penjualan Bulanan
 st.header("📈 Tren Penjualan Bulanan")
@@ -36,27 +55,12 @@ monthly_sales['order_purchase_timestamp'] = monthly_sales['order_purchase_timest
 
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.lineplot(data=monthly_sales, x='order_purchase_timestamp', y='price', marker='o', color='b', ax=ax)
-# Hapus format scientific notation pada sumbu y
-plt.ticklabel_format(style='plain', axis='y')
+plt.ticklabel_format(style='plain', axis='y')  # Hapus format scientific notation pada sumbu y
 plt.title(f"Tren Penjualan Bulanan ({selected_year})", fontsize=16)
 plt.xlabel("Bulan", fontsize=14)
 plt.ylabel("Total Penjualan", fontsize=14)
 plt.xticks(rotation=45)
 plt.grid(linestyle='--', alpha=0.7)
-st.pyplot(fig)
-
-# Top 10 Kategori Produk Terlaris
-st.header("🏆 Top 10 Kategori Produk Terlaris")
-top_products = filtered_data['product_category_name_english'].value_counts().reset_index()
-top_products.columns = ['Kategori Produk', 'Jumlah Penjualan']
-top_10_products = top_products.head(10)
-
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.barplot(data=top_10_products, x='Jumlah Penjualan', y='Kategori Produk', hue='Kategori Produk', palette='viridis', ax=ax)
-plt.title(f"Top 10 Kategori Produk Terlaris ({selected_year})", fontsize=16)
-plt.xlabel("Jumlah Penjualan", fontsize=14)
-plt.ylabel("Kategori Produk", fontsize=14)
-plt.grid(axis='x', linestyle='--', alpha=0.7)
 st.pyplot(fig)
 
 # Distribusi Metode Pembayaran
